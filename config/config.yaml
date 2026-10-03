@@ -1,0 +1,18 @@
+# Aegis Configuration File
+
+antigravity:
+  # Base directory for Antigravity IDE data.
+  # If left empty, Aegis will auto-detect: C:\Users\<username>\.gemini\antigravity-ide
+  base_dir: ""
+
+observer:
+  # Polling interval in seconds for directory watching
+  poll_interval_seconds: 1.0
+  # Maximum file offset history size for deduplication
+  dedup_cache_size: 1000
+  # Stream stdout output live from task logs
+  stream_task_logs: true
+
+logging:
+  level: "INFO"
+  format: "[%(asctime)s] [%(levelname)s] %(message)s"

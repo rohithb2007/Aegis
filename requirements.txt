@@ -1,0 +1,5 @@
+# Aegis V1.0.0-rc1 Dependencies
+# Core Aegis Gateway and Supervision engine rely strictly on Python 3.10+ Standard Library.
+
+# Development & Testing
+pytest>=7.0.0

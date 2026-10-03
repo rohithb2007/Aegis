@@ -1,0 +1,36 @@
+# Python Bytecode
+__pycache__/
+*.py[cod]
+
+# Testing & Cache
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Environment & Local Secrets
+.env
+.env.*
+venv/
+.venv/
+
+# Aegis Runtime / Local State
+*.db
+*.sqlite
+*.sqlite3
+*.log
+config/*.json
+protection_state.json
+audit_logs/
+logs/
+
+# Frontend & Node
+node_modules/
+dashboard/node_modules/
+dashboard/dist/
+dist/
+
+# IDE & OS Artifacts
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
