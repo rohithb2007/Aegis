@@ -6,15 +6,15 @@
 ![Tests](https://img.shields.io/badge/tests-242%20passed-success.svg)
 ![Version](https://img.shields.io/badge/version-1.1.0-emerald.svg)
 
+![Aegis Hero Banner](docs/screenshots/aegis-hero.png)
+
 Aegis is a local security supervision layer designed to observe AI coding-agent activity, analyze command risk and contextual alignment, enforce policy decisions, and require explicit human approval for risky actions while automatically allowing safe project-relevant operations.
 
 > **Note:** Aegis is designed as a local developer-tool governance boundary. It is not a kernel-level sandbox or process isolation driver.
 
 ---
 
-## Overview
-
-![Aegis SOC Overview](docs/screenshots/aegis-overview-dark.png)
+## Why Aegis?
 
 AI coding agents can execute shell commands autonomously. Traditional approval models either require constant manual confirmation for every routine command (causing approval fatigue) or give agents unchecked execution authority.
 
@@ -26,7 +26,7 @@ Aegis balances security and productivity through a three-tier decision model:
 
 ---
 
-## Core Security Model
+## Core Security Decision Model
 
 ```mermaid
 flowchart TD
@@ -61,26 +61,16 @@ flowchart TD
 
 ---
 
-## Premium Security Operations Center (SOC)
+## Security Operations Center (SOC) Dashboard
 
 Aegis V1.1 includes a local Security Operations Center web application for real-time observability and human authorization.
 
-### Key SOC Capabilities
+### SOC Architecture & Capabilities
 
 - **Overview Dashboard:** Real-time monitoring of Gateway status, protection state, evaluation counters, and active tasks.
-- **Human Approval Center:** Detailed explainability cards for pending requests, including risk scores, triggered policy rules, AI verdicts, and single-click `APPROVE` or `DENY` controls.
-- **Security Audit Explorer:** Secret-redacted chronological log of evaluated actions with status and risk level filtering.
-- **Dual Visual Themes:** Seamless toggle between Dark Obsidian (glassmorphism) and Warm Off-White/Brown themes.
-
----
-
-## Security Decision Model
-
-| Decision | Risk Level | Gateway Status | Action Taken |
-| :--- | :--- | :--- | :--- |
-| **ALLOW** | Safe / Low | `PERMITTED` | Cleared for automatic execution. |
-| **REVIEW** | High Risk | `PAUSED_FOR_APPROVAL` | Execution paused until human approval. |
-| **BLOCK** | Critical | `REJECTED_POLICY` | Execution prohibited by policy invariant. |
+- **Human Approval Center:** Detailed explainability breakdown for pending requests, including risk scores, triggered policy rules, AI verdicts, and single-click `APPROVE` or `DENY` controls.
+- **Security Audit Explorer:** Secret-redacted chronological log of evaluated actions with status (`ALLOW`, `REVIEW`, `BLOCK`, `PERMITTED`) and risk level filtering.
+- **Dual Visual Themes:** Seamless toggle between Dark Obsidian (sleek glassmorphism) and Warm Off-White/Brown themes.
 
 ---
 
@@ -128,7 +118,7 @@ Aegis has experimentally verified interception of the **Antigravity PowerShell e
 
 1. **Clone Repository:**
    ```bash
-   git clone https://github.com/<your-username>/Aegis.git
+   git clone https://github.com/rohithb2007/Aegis.git
    cd Aegis
    ```
 
@@ -216,9 +206,3 @@ See [SECURITY.md](SECURITY.md) for full details on threat models, security invar
 ## Changelog
 
 See [CHANGELOG.md](CHANGELOG.md) for release history and version highlights.
-
----
-
-## License
-
-*License details to be specified by maintainer.*
