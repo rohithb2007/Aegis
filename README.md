@@ -46,6 +46,27 @@ flowchart TD
 
 ---
 
+## Dashboard Showcase
+
+Aegis includes a local Security Operations Center (SOC) web application built with React, TypeScript, and Vite for real-time observability, telemetry inspection, and human authorization.
+
+### SOC Overview
+![Aegis Dashboard Overview](docs/screenshots/aegis-dashboard-overview.png)
+
+### Human Approval Center
+![Aegis Human Approval Center](docs/screenshots/aegis-approval-center.png)
+
+### Agent Supervision
+![Aegis Agent Supervision](docs/screenshots/aegis-agents.png)
+
+### Security Audit Explorer
+![Aegis Security Audit Explorer](docs/screenshots/aegis-audit-explorer.png)
+
+### Protection & Invariants
+![Aegis Protection Settings](docs/screenshots/aegis-protection.png)
+
+---
+
 ## Key Features
 
 - **Real-Time Command Supervision:** Intercepts proposed shell commands prior to execution.
@@ -58,19 +79,6 @@ flowchart TD
 - **Secret Redaction:** Automatically redacts API keys, tokens, and credentials (`[REDACTED_SECRET_KEY]`) before logging or rendering.
 - **Local SOC Dashboard:** Real-time web dashboard featuring Dark Obsidian and Warm Off-White/Brown themes, live approval controls, and audit logs.
 - **Local-Only Privacy:** Operates entirely on `127.0.0.1` with zero external cloud dependencies or telemetry calls.
-
----
-
-## Security Operations Center (SOC) Dashboard
-
-Aegis V1.1 includes a local Security Operations Center web application for real-time observability and human authorization.
-
-### SOC Architecture & Capabilities
-
-- **Overview Dashboard:** Real-time monitoring of Gateway status, protection state, evaluation counters, and active tasks.
-- **Human Approval Center:** Detailed explainability breakdown for pending requests, including risk scores, triggered policy rules, AI verdicts, and single-click `APPROVE` or `DENY` controls.
-- **Security Audit Explorer:** Secret-redacted chronological log of evaluated actions with status (`ALLOW`, `REVIEW`, `BLOCK`, `PERMITTED`) and risk level filtering.
-- **Dual Visual Themes:** Seamless toggle between Dark Obsidian (sleek glassmorphism) and Warm Off-White/Brown themes.
 
 ---
 
