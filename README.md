@@ -6,7 +6,7 @@
 ![Tests](https://img.shields.io/badge/tests-242%20passed-success.svg)
 ![Version](https://img.shields.io/badge/version-1.1.0-emerald.svg)
 
-![Aegis Hero Banner](docs/screenshots/aegis-hero.png)
+![Aegis Hero Banner](<img width="1280" height="640" alt="Aegis Thumbnail" src="https://github.com/user-attachments/assets/2f1568ed-8a54-459f-9acb-9ec14cd0006a" />)
 
 Aegis is a local security supervision layer designed to observe AI coding-agent activity, analyze command risk and contextual alignment, enforce policy decisions, and require explicit human approval for risky actions while automatically allowing safe project-relevant operations.
 
