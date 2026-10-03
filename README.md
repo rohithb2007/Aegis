@@ -2,181 +2,484 @@
 
 ### Human-in-the-Loop Security Layer for AI Coding Agents
 
-![Python Version](https://img.shields.io/badge/python-3.10%2B-blue.svg)
-![Tests](https://img.shields.io/badge/tests-242%20passed-success.svg)
-![Version](https://img.shields.io/badge/version-1.1.0-emerald.svg)
+<p align="center">
+  <img src="docs/screenshots/aegis-thumbnail.png" alt="Aegis" width="1280">
+</p>
 
-![Aegis Hero Banner](<img width="1280" height="640" alt="Aegis Thumbnail" src="https://github.com/user-attachments/assets/2f1568ed-8a54-459f-9acb-9ec14cd0006a" />)
+<p align="center">
+  <strong>Observe. Analyze. Decide. Enforce.</strong><br>
+  A local security supervision layer for autonomous AI coding agents.
+</p>
 
-Aegis is a local security supervision layer designed to observe AI coding-agent activity, analyze command risk and contextual alignment, enforce policy decisions, and require explicit human approval for risky actions while automatically allowing safe project-relevant operations.
+<p align="center">
+  <img src="https://img.shields.io/badge/python-3.10%2B-blue.svg" alt="Python 3.10+">
+  <img src="https://img.shields.io/badge/tests-242%20passed-success.svg" alt="242 tests passed">
+  <img src="https://img.shields.io/badge/version-1.1.0-emerald.svg" alt="Version 1.1.0">
+</p>
 
-> **Note:** Aegis is designed as a local developer-tool governance boundary. It is not a kernel-level sandbox or process isolation driver.
+---
+
+## What is Aegis?
+
+Aegis is a local security supervision layer designed to supervise AI coding-agent activity.
+
+It observes agent activity, analyzes command risk and contextual alignment, applies deterministic security policy, and introduces a human approval checkpoint for risky actions while allowing safe project-relevant operations to proceed automatically.
+
+The goal is simple:
+
+> **Let AI coding agents work autonomously without giving them unrestricted authority over the machine.**
+
+Aegis is designed as a local developer-tool governance boundary. It is **not** a kernel-level sandbox, hypervisor, or process-isolation driver.
 
 ---
 
 ## Why Aegis?
 
-AI coding agents can execute shell commands autonomously. Traditional approval models either require constant manual confirmation for every routine command (causing approval fatigue) or give agents unchecked execution authority.
+AI coding agents can execute commands autonomously while working on software projects.
 
-Aegis balances security and productivity through a three-tier decision model:
+A security layer therefore needs to distinguish between:
 
-- **SAFE Actions** → `ALLOW` (Executed automatically without friction)
-- **HIGH-RISK Actions** → `REVIEW` (Paused until explicit human authorization)
-- **CRITICAL Actions** → `BLOCK` (Prohibited with non-overridable security policy)
+- routine development operations that should not interrupt the developer,
+- actions that deserve explicit human authorization,
+- and fundamentally dangerous operations that should never be approved.
+
+Aegis uses a three-level decision model:
+
+| Decision | Meaning |
+|---|---|
+| 🟢 **ALLOW** | Safe operation permitted automatically |
+| 🟠 **REVIEW** | Execution paused until explicit human approval |
+| 🔴 **BLOCK** | Operation rejected by a non-overridable security policy |
+
+This is designed to reduce approval fatigue without giving the agent unrestricted execution authority.
 
 ---
 
-## Core Security Decision Model
+# Security Architecture
 
 ```mermaid
 flowchart TD
-    Agent[AI Coding Agent Proposed Tool / Command] --> Obs[Observer Pipeline & Context Tracking]
-    Obs --> Safety[Deterministic Safety Analyzer V0.3]
-    Safety --> AI[AI Supervisor V0.4]
-    AI --> Router[Model Router V0.5]
-    Router --> Policy[Policy Engine V0.6]
-    
-    Policy -->|SAFE| Allow[ALLOW -> Automatic Execution]
-    Policy -->|HIGH RISK| Review[REVIEW -> Paused for Human Approval]
-    Policy -->|CRITICAL| Block[BLOCK -> Prohibited Invariant]
-    
-    Review -->|Human Approves| Permitted[PERMITTED -> Cleared for Enforcement]
-    Review -->|Human Denies| Denied[DENIED -> Execution Prohibited]
+    Agent["AI Coding Agent"]
+    Observer["V0.1 Observer"]
+    Context["V0.2 Session Context"]
+    Safety["V0.3 Deterministic Safety Engine"]
+    Supervisor["V0.4 AI Supervisor"]
+    Router["V0.5 Intelligent Model Router"]
+    Policy["V0.6 Policy Engine"]
+    Approval["Human Approval"]
+    Enforcement["V0.7 Enforcement"]
+    Gateway["Protected Gateway / Interceptor"]
+
+    Agent --> Observer
+    Observer --> Context
+    Context --> Safety
+    Safety --> Supervisor
+    Supervisor --> Router
+    Router --> Policy
+
+    Policy -->|ALLOW| Enforcement
+    Policy -->|REVIEW| Approval
+    Policy -->|BLOCK| Block["BLOCKED"]
+
+    Approval -->|APPROVED| Enforcement
+    Approval -->|DENIED / EXPIRED| Denied["DENIED"]
+
+    Enforcement --> Gateway
+```
+
+### Decision Flow
+
+```text
+AI Coding Agent
+       │
+       ▼
+   Observe
+       │
+       ▼
+Analyze command + context
+       │
+       ├───────────────┐
+       ▼               ▼
+     SAFE            RISKY
+       │               │
+       ▼               ▼
+    ALLOW            REVIEW
+       │               │
+       │          Human approval
+       │               │
+       │        ┌──────┴──────┐
+       │        ▼             ▼
+       │    APPROVED        DENIED
+       │        │
+       └────────┴──────► ENFORCE
+
+Critical / prohibited actions
+              │
+              ▼
+            BLOCK
 ```
 
 ---
 
-## Dashboard Showcase
+# Dashboard
 
-Aegis includes a local Security Operations Center (SOC) web application built with React, TypeScript, and Vite for real-time observability, telemetry inspection, and human authorization.
+Aegis includes a local Security Operations Center (SOC) dashboard built with React, TypeScript, and Vite.
 
-### SOC Overview
-![Aegis Dashboard Overview](docs/screenshots/aegis-dashboard-overview.png)
+The dashboard provides visibility into:
 
-### Human Approval Center
-![Aegis Human Approval Center](docs/screenshots/aegis-approval-center.png)
+- Gateway and protection status
+- Antigravity supervision
+- Human approval requests
+- Command risk
+- Security capabilities
+- Audit events
+- Protection state
+- Agent activity
 
-### Agent Supervision
-![Aegis Agent Supervision](docs/screenshots/aegis-agents.png)
+## SOC Overview
 
-### Security Audit Explorer
-![Aegis Security Audit Explorer](docs/screenshots/aegis-audit-explorer.png)
+<p align="center">
+  <img src="docs/screenshots/aegis-dashboard-overview.png" alt="Aegis Dashboard Overview" width="1200">
+</p>
 
-### Protection & Invariants
-![Aegis Protection Settings](docs/screenshots/aegis-protection.png)
+## Human Approval Center
+
+<p align="center">
+  <img src="docs/screenshots/aegis-approval-center.png" alt="Aegis Human Approval Center" width="1200">
+</p>
+
+## Agent Supervision
+
+<p align="center">
+  <img src="docs/screenshots/aegis-agents.png" alt="Aegis Agent Supervision" width="1200">
+</p>
+
+## Security Audit Explorer
+
+<p align="center">
+  <img src="docs/screenshots/aegis-audit-explorer.png" alt="Aegis Security Audit Explorer" width="1200">
+</p>
+
+## Protection & Security State
+
+<p align="center">
+  <img src="docs/screenshots/aegis-protection.png" alt="Aegis Protection Controls" width="1200">
+</p>
 
 ---
 
-## Key Features
+# Core Features
 
-- **Real-Time Command Supervision:** Intercepts proposed shell commands prior to execution.
-- **Deterministic Risk Analysis:** Scans command patterns, capabilities, and arguments for security risks.
-- **Context-Aware AI Supervision:** Analyzes intent alignment against active session context and task goals.
-- **Intelligent Model Router:** Directs evaluations through fast heuristic or deep reasoning tiers based on risk score.
-- **Human-in-the-Loop Approval:** Holds high-risk actions in `PAUSED_FOR_APPROVAL` until a human approves or denies.
-- **Exact-Command Approval Binding:** Approvals are strictly bound to exact normalized command strings (`normalize_command`) and session context.
-- **Fail-Closed Architecture:** If the Gateway service is unreachable while protection is `ON`, execution defaults to `FAIL CLOSED` (Exit code 3).
-- **Secret Redaction:** Automatically redacts API keys, tokens, and credentials (`[REDACTED_SECRET_KEY]`) before logging or rendering.
-- **Local SOC Dashboard:** Real-time web dashboard featuring Dark Obsidian and Warm Off-White/Brown themes, live approval controls, and audit logs.
-- **Local-Only Privacy:** Operates entirely on `127.0.0.1` with zero external cloud dependencies or telemetry calls.
+### Real-Time Agent Supervision
 
----
+Observes activity from the verified Antigravity execution path and feeds relevant events into the Aegis supervision pipeline.
 
-## Human Approval Lifecycle
+### Deterministic Risk Analysis
 
+Analyzes command structure, arguments, capabilities, filesystem scope, network activity, package installation, Git operations, credentials, privilege escalation, and destructive operations.
+
+### Context-Aware AI Supervision
+
+An optional AI reasoning layer evaluates whether an action is contextually aligned with the active task, workflow phase, and recent activity.
+
+AI reasoning is advisory and cannot override stronger deterministic security invariants.
+
+### Intelligent Model Routing
+
+Routes evaluations according to:
+
+- technical complexity,
+- uncertainty,
+- action sensitivity,
+- technical risk,
+- contextual requirements.
+
+This avoids unnecessary AI calls for routine low-risk operations.
+
+### Human-in-the-Loop Approval
+
+Risky operations can enter:
+
+```text
+PAUSED_FOR_APPROVAL
 ```
+
+and remain blocked until the human explicitly approves or denies the request.
+
+### Exact-Command Approval Binding
+
+Approvals are bound to the normalized command and relevant execution context.
+
+A materially different command requires a new approval.
+
+For example:
+
+```text
+git push --dry-run --force origin test-a
+```
+
+does not automatically authorize:
+
+```text
+git push --force origin production
+```
+
+### Fail-Closed Protection
+
+When protection is enabled and the Aegis Gateway cannot evaluate a command, the interceptor fails closed rather than allowing the command to continue.
+
+### Critical Action Protection
+
+Fundamentally destructive or prohibited actions cannot be approved through the normal human approval flow.
+
+### Secret Redaction
+
+Sensitive values such as API keys, bearer tokens, passwords, and private-key material are sanitized before being exposed to logging or AI supervision.
+
+### Local SOC Dashboard
+
+A local dashboard provides:
+
+- live system status,
+- approvals,
+- agent activity,
+- audit records,
+- protection state,
+- security decisions.
+
+### Local-First Architecture
+
+The Aegis Gateway and dashboard operate locally on:
+
+```text
+127.0.0.1
+```
+
+Optional AI providers can be configured when AI supervision is enabled.
+
+---
+
+# Human Approval Lifecycle
+
+```text
 REVIEW
-  ↓
-PENDING (Command paused; Exit Code 2 returned to interceptor)
-  ↓
-HUMAN AUTHORIZATION (Via SOC Dashboard or CLI: python main.py --approve <req_id>)
-  ↓
-APPROVED (Request status updated in Gateway memory)
-  ↓
+  │
+  ▼
+PENDING
+Command execution paused
+  │
+  ▼
+HUMAN AUTHORIZATION
+  │
+  ├───────────────┐
+  ▼               ▼
+APPROVED         DENIED
+  │
+  ▼
 EXACT COMMAND RESUBMISSION
-  ↓
-PERMITTED (Gateway matches approved request identity; execution proceeds)
+  │
+  ▼
+PERMITTED
+  │
+  ▼
+ENFORCEMENT
 ```
 
-> **Approval Binding:** Human authorization is strictly bound to the exact normalized command string and context. Modifying arguments (e.g. changing `--dry-run` to `--force`) invalidates the approval key and requires a new review.
+Approval can be performed through the SOC dashboard or CLI.
+
+```bash
+# List approval requests
+python main.py --approval-list
+
+# Approve a request
+python main.py --approve <REQUEST_ID>
+
+# Deny a request
+python main.py --deny <REQUEST_ID>
+```
+
+### Approval Binding
+
+Human authorization is not a blanket permission.
+
+An approval is associated with the normalized command and execution context.
+
+Changing meaningful command arguments requires a new approval.
 
 ---
 
-## Antigravity Integration & Boundary Limitations
+# Antigravity Integration
 
-Aegis has experimentally verified interception of the **Antigravity PowerShell execution path** used in Windows environment testing.
+Aegis has **experimentally verified interception of the Antigravity PowerShell execution path used in the Windows test environment**.
 
-### Documented Boundary Limitations
+The verified execution path is:
 
-- **PowerShell `-NoProfile` Boundary:** Executing PowerShell with `-NoProfile` bypasses profile-based pre-execution hooks.
-- **Interactive Persistent REPL:** Commands entered inside an already-active interactive subshell REPL operate past shell startup and outside the profile boundary.
-- **Direct Native Subprocesses:** Aegis does not implement kernel-level drivers or process-injection hooks; native binaries launched directly outside the verified shell profile are not intercepted.
-- **Fail-Closed Guarantee:** When Protection is `ON`, any shell command attempting Gateway evaluation while Gateway is offline will fail closed (`Exit 3`).
+```text
+Antigravity
+    │
+    ▼
+Language Server
+    │
+    ▼
+PowerShell -Command
+    │
+    ▼
+Aegis PowerShell Interceptor
+    │
+    ▼
+Aegis Gateway
+    │
+    ▼
+Safety → AI → Router → Policy
+    │
+    ├── ALLOW
+    ├── REVIEW
+    └── BLOCK
+```
+
+Aegis does not claim universal interception of every process that could potentially be launched by an operating system or application.
+
+## Boundary Limitations
+
+### PowerShell `-NoProfile`
+
+A standalone PowerShell invocation using:
+
+```text
+-NoProfile
+```
+
+can bypass the profile-based interception boundary.
+
+### Interactive Persistent REPL
+
+Commands entered after a persistent interactive shell has already started can operate beyond the shell-startup interception point.
+
+### Direct Native Process Creation
+
+Aegis does not use kernel drivers, DLL injection, or OS-wide process hooks.
+
+Native process creation paths that bypass the verified PowerShell execution boundary are therefore outside the current interception scope.
+
+### Protection Fail-Closed Behavior
+
+When protection is `ON`, a command requiring Gateway evaluation will fail closed if the Gateway is unavailable.
 
 ---
 
-## Installation & Setup
+# Security Model
 
-### Prerequisites
+Aegis is built around explicit security invariants.
+
+Important guarantees include:
+
+- Protection enabled + Gateway unavailable → **FAIL CLOSED**
+- Protection state is human-controlled
+- Agent attempts to disable protection are rejected
+- Critical actions cannot be overridden by approval
+- Approval is bound to the exact command identity
+- Modified commands require new approval
+- Denied/expired/cancelled approvals cannot execute
+- Stronger security decisions cannot be downgraded by approval
+- Secrets are redacted from telemetry
+- Unexpected evaluation errors never become `ALLOW`
+
+See [`SECURITY.md`](SECURITY.md) for the complete security model and responsible disclosure information.
+
+---
+
+# Installation
+
+## Prerequisites
 
 - Python 3.10+
-- Node.js 18+ (for SOC Dashboard)
+- Node.js 18+ for the SOC dashboard
+- Windows for the currently verified Antigravity integration
 
-### Quickstart
+## Clone
 
-1. **Clone Repository:**
-   ```bash
-   git clone https://github.com/rohithb2007/Aegis.git
-   cd Aegis
-   ```
+```bash
+git clone https://github.com/rohithb2007/Aegis.git
+cd Aegis
+```
 
-2. **Set Up Python Virtual Environment:**
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
-   pip install -r requirements.txt
-   ```
+## Python Environment
 
-3. **Install Dashboard Dependencies:**
-   ```bash
-   cd dashboard
-   npm install
-   cd ..
-   ```
+### Windows
+
+```powershell
+python -m venv venv
+venv\Scripts\activate
+pip install -r requirements.txt
+```
+
+### Linux / macOS
+
+```bash
+python -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+```
+
+## Dashboard Dependencies
+
+```bash
+cd dashboard
+npm install
+cd ..
+```
 
 ---
 
-## Usage
+# Usage
 
-### Start Aegis Gateway Service
+## Start Aegis
+
+Run the Gateway from a separate terminal:
 
 ```bash
 python main.py --start
 ```
 
-### Install PowerShell Profile Interceptor
+The Gateway listens locally on:
+
+```text
+127.0.0.1:8765
+```
+
+Keep this process running while the supervised agent is active.
+
+## Install the PowerShell Interceptor
 
 ```bash
 python main.py --install-interceptor
 ```
 
-### Check Protection Status
+## Check Protection Status
 
 ```bash
 python main.py --protection-status
 ```
 
-### Launch SOC Dashboard
+## Start the Dashboard
+
+Start the dashboard development server:
 
 ```bash
-python main.py --dashboard
+cd dashboard
+npm run dev
 ```
-*Navigates to `http://localhost:5173`.*
 
-### Human Approval via CLI
+Then open:
+
+```text
+http://localhost:5173
+```
+
+## Human Approval via CLI
 
 ```bash
-# List pending requests
+# List approval requests
 python main.py --approval-list
 
 # Approve a request
@@ -188,29 +491,146 @@ python main.py --deny <REQUEST_ID>
 
 ---
 
-## Verification & Testing
+# Verification & Testing
 
-Run the comprehensive offline test suite:
+Aegis currently has:
+
+```text
+242 passed
+0 failed
+0 skipped
+```
+
+Run the complete test suite:
 
 ```bash
 python -m pytest -q
 ```
 
-**Verified Test Result:**
-```
-242 passed in 37.10s
+Build the dashboard:
+
+```bash
+cd dashboard
+npm run build
 ```
 
-All 242 tests execute 100% offline with 0 failures and 0 skipped tests.
+The V1.1.0 dashboard build has been verified successfully with Vite.
 
 ---
 
-## Security & Disclosure
+# Project Structure
 
-See [SECURITY.md](SECURITY.md) for full details on threat models, security invariants, secret redaction, and responsible disclosure procedures.
+```text
+Aegis/
+│
+├── ai_supervisor/       # AI reasoning and model routing
+├── enforcement/         # Execution enforcement
+├── observer/            # Antigravity observation
+├── policy/              # Policy and human approval
+├── protected/           # Gateway, interceptor and protected workspace
+├── safety/              # Deterministic security analysis
+├── supervisor/          # Session and workflow context
+│
+├── dashboard/           # React + TypeScript SOC dashboard
+│
+├── tests/               # Security and integration tests
+│
+├── docs/
+│   └── screenshots/     # Project and dashboard screenshots
+│
+├── main.py
+├── pyproject.toml
+├── requirements.txt
+├── SECURITY.md
+├── CHANGELOG.md
+└── README.md
+```
 
 ---
 
-## Changelog
+# Development Philosophy
 
-See [CHANGELOG.md](CHANGELOG.md) for release history and version highlights.
+Aegis follows several principles:
+
+**Autonomy for routine work.**
+
+Safe project-relevant operations should not require constant human intervention.
+
+**Human authority for meaningful risk.**
+
+Actions with significant security or system impact should require explicit human authorization.
+
+**Non-overridable critical protection.**
+
+Some operations should never become executable merely because an AI model or human approval says so.
+
+**Fail closed.**
+
+Unexpected security-system failures should result in restricted execution rather than silently granting permission.
+
+**Explainability.**
+
+Security decisions should expose their reasoning, capabilities, policy rules, and approval state.
+
+**Honest boundaries.**
+
+Aegis documents what it has actually verified instead of claiming universal OS-level interception.
+
+---
+
+# Roadmap
+
+Current release:
+
+```text
+V1.1.0
+```
+
+Completed milestones include:
+
+```text
+V0.1  Observer
+V0.2  Session Understanding
+V0.3  Deterministic Safety Engine
+V0.4  AI Supervisor
+V0.5  Intelligent Model Router
+V0.6  Policy & Human Approval
+V0.7  Enforcement
+V0.8  Protected Workspace / Command Proxy
+V0.9  Antigravity Integration
+V0.9.1 Security Hardening
+V0.9.2 Shared Approval State
+V0.9.3 Human-in-the-Loop Supervision
+V0.9.4 Security & Reliability Hardening
+V1.0.0-rc1 Release Candidate
+V1.1.0 Security Operations Center Dashboard
+```
+
+Future work may explore stronger process-level enforcement boundaries and broader agent integrations.
+
+---
+
+# Security & Disclosure
+
+For security architecture, threat-model details, invariants, limitations, and responsible disclosure:
+
+➡️ [`SECURITY.md`](SECURITY.md)
+
+---
+
+# Changelog
+
+See [`CHANGELOG.md`](CHANGELOG.md) for release history and version details.
+
+---
+
+# License
+
+License information will be added separately.
+
+---
+
+<p align="center">
+  <strong>Aegis</strong><br>
+  Human-in-the-Loop Security for Autonomous AI Coding Agents
+</p>
